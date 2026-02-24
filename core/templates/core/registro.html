@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h1>Crear cuenta</h1>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      {{ field }}
+      {% for error in field.errors %}
+        <p class="error">{{ error }}</p>
+      {% endfor %}
+    {% endfor %}
+    <button type="submit">Registrarse</button>
+  </form>
+  <p style="margin-top: 16px;">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión</a></p>
+</div>
+{% endblock %}

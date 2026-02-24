@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card">
+  <h1>🐾 {{ usuario.username }}</h1>
+  <p style="color: #92400e;">{{ ladridos.count }} ladrido{{ ladridos.count|pluralize }}</p>
+</div>
+
+{% if es_propietario %}
+<div class="card">
+  <form method="post" id="form-ladrido">
+    {% csrf_token %}
+    <textarea name="contenido" id="contenido" rows="3"
+      placeholder="¿Qué quieres ladrar hoy? 🐶"
+      maxlength="140"
+      style="resize: none;"></textarea>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <span id="contador" style="color: #92400e; font-size: 0.85rem;">140 caracteres restantes</span>
+      <button type="submit">Ladrar 🐾</button>
+    </div>
+  </form>
+</div>
+{% endif %}
+
+{% for ladrido in ladridos %}
+<div class="card" style="padding: 20px 24px;">
+
+  <p class="ladrido-texto" style="font-size: 1rem; line-height: 1.6; margin-bottom: 12px;">{{ ladrido.contenido }}</p>
+
+  <form class="ladrido-edit-form" method="post" action="{% url 'editar_ladrido' ladrido.id %}" style="display:none; margin-bottom: 12px;">
+    {% csrf_token %}
+    <textarea name="contenido" maxlength="140" rows="2" style="resize:none;">{{ ladrido.contenido }}</textarea>
+    <div style="display:flex; gap: 8px; margin-top: 4px;">
+      <button type="submit">Guardar</button>
+      <button type="button" class="btn-cancelar" style="background: transparent; color: var(--color-primary); border: 1.5px solid var(--color-primary);">Cancelar</button>
+    </div>
+  </form>
+
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <span style="font-size: 0.78rem; color: var(--color-text-subtle);">{{ ladrido.fecha|date:"d M Y, H:i" }}</span>
+    {% if es_propietario %}
+    <div style="display: flex; gap: 8px;">
+      <button type="button" class="btn-editar">✏️ Editar</button>
+      <form method="post" action="{% url 'eliminar_ladrido' ladrido.id %}" style="margin:0;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('¿Eliminar este ladrido?')">🗑️ Eliminar</button>      </form>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+{% empty %}
+<div class="card" style="text-align: center; color: var(--color-text-subtle);">
+  <p>Aún no hay ladridos. ¡Sé el primero en ladrar! 🐕</p>
+</div>
+{% endfor %}
+
+<script>
+  // Contador de caracteres
+  const textarea = document.getElementById('contenido');
+  const contador = document.getElementById('contador');
+  if (textarea) {
+    textarea.addEventListener('input', () => {
+      const restantes = 140 - textarea.value.length;
+      contador.textContent = restantes + ' caracteres restantes';
+      contador.style.color = restantes < 20 ? '#dc2626' : '#92400e';
+    });
+  }
+
+  // Edición inline
+  document.querySelectorAll('.btn-editar').forEach(btn => {
+    const card = btn.closest('.card');
+    const texto = card.querySelector('.ladrido-texto');
+    const form = card.querySelector('.ladrido-edit-form');
+    const cancelar = card.querySelector('.btn-cancelar');
+
+    btn.addEventListener('click', () => {
+      texto.style.display = 'none';
+      form.style.display = 'block';
+      btn.style.display = 'none';
+      form.querySelector('textarea').focus();
+    });
+
+    cancelar.addEventListener('click', () => {
+      texto.style.display = 'block';
+      form.style.display = 'none';
+      btn.style.display = 'inline-block';
+    });
+  });
+</script>
+
+{% endblock %}
