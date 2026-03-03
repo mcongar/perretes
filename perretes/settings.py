@@ -23,9 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-m2_s*fpyh2%pj8*)#7$y%1$kb^^30^weh0880+rguc@43fn9_0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+DEBUG = False
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -51,6 +50,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'perretes.urls'
+
+LOGIN_URL = '/login/'
 
 TEMPLATES = [
     {

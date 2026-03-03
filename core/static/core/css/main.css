@@ -1,6 +1,6 @@
-  /* =====================
-    VARIABLES
-    ===================== */
+/* =====================
+   VARIABLES
+   ===================== */
    :root {
     --color-primary: #c2410c;
     --color-primary-dark: #9a3412;
@@ -72,8 +72,13 @@
   
   nav .brand:hover { opacity: 0.8; }
   
+  nav .links {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
   nav .links a {
-    margin-left: 16px;
     color: var(--color-text-muted);
     text-decoration: none;
     font-weight: 500;
@@ -82,6 +87,11 @@
   }
   
   nav .links a:hover { color: var(--color-primary); }
+  
+  .nav-logout {
+    display: flex;
+    align-items: center;
+  }
   
   /* =====================
      LAYOUT
@@ -187,9 +197,6 @@
   }
   
   .messages li {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #dc2626;
     padding: 10px 14px;
     border-radius: var(--radius-sm);
     list-style: none;
@@ -198,6 +205,21 @@
     white-space: normal;
     word-break: break-word;
     overflow-wrap: break-word;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .messages li.error {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #dc2626;
+  }
+
+  .messages li.success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
   }
   
   /* =====================
